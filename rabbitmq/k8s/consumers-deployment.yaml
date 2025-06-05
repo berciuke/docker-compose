@@ -1,0 +1,68 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mortgage-consumer
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mortgage-consumer
+  template:
+    metadata:
+      labels:
+        app: mortgage-consumer
+    spec:
+      containers:
+      - name: mortgage-consumer
+        image: rabbitmq-consumers:latest
+        imagePullPolicy: Never
+        command: ["python", "mortgage_consumer.py"]
+        env:
+        - name: RABBITMQ_HOST
+          value: "rabbitmq"
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cash-consumer
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: cash-consumer
+  template:
+    metadata:
+      labels:
+        app: cash-consumer
+    spec:
+      containers:
+      - name: cash-consumer
+        image: rabbitmq-consumers:latest
+        imagePullPolicy: Never
+        command: ["python", "cash_consumer.py"]
+        env:
+        - name: RABBITMQ_HOST
+          value: "rabbitmq"
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: business-consumer
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: business-consumer
+  template:
+    metadata:
+      labels:
+        app: business-consumer
+    spec:
+      containers:
+      - name: business-consumer
+        image: rabbitmq-consumers:latest
+        imagePullPolicy: Never
+        command: ["python", "business_consumer.py"]
+        env:
+        - name: RABBITMQ_HOST
+          value: "rabbitmq" 
